@@ -48,13 +48,13 @@ function player.taketurn()
           local x = d6()
           print("player rolled "..x.." skeletons")
           print("player placing marker")
-          player.markers = tadd("marker stock",player.markers,-1)
+          player.markers = tadd("player marker stock",player.markers,-1)
           game.board[player.location].marker = player.id
           if x > player.skeletons then --very greedy strategy?
             x = player.skeletons 
           end
           print("player summoning "..x.." skeletons")
-          player.skeletons = tadd("skeleton stock",player.skeletons,0-x)
+          player.skeletons = tadd("player skeleton stock",player.skeletons,0-x)
           game.board[player.location].skeletons = x
         else
           print("player has no markers!")

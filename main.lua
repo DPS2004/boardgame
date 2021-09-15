@@ -8,8 +8,8 @@ end
 function p(s)
   if db then print(s) end
 end
-function tadd(a,b)
-  print("from "..a.. " to " .. a+b)
+function tadd(a,b,c)
+  print(c.." from "..a.. " to " .. a+b)
   return a+b
 end
 
