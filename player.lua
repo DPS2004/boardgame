@@ -65,7 +65,20 @@ function player.taketurn()
         print("player has no skeletons!")
       end
     else
-      print('uh oh, grave is occupied! TODO')
+      print('uh oh, grave is occupied!')
+      if game.board[player.location].marker == player.id then
+        print('its your own grave, dummy!')
+        if game.board[player.location].skeletons ~= 0 then
+          print('harvesting skeletons...')
+          x = game.board[player.location].skeletons
+          player.skeletons = tadd("player skeleton stock",player.skeletons,x)
+          game.board[player.location].skeletons = 0
+          print("player gained "..x.." points!")
+          player.points = tadd("player points",player.points,x)
+        else
+          print("no skeletons here...")
+        end
+      end
     end
   end
 end

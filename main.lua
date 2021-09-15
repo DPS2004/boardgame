@@ -43,11 +43,34 @@ function game.init()
     game.players[i].init(i)
   end
 end
-
+function game.checkforend()
+  local emptytiles = 0
+  for i,v in ipairs(game.board) do
+    
+    if v.marker == 0 then
+      emptytiles = emptytiles + 1
+    end
+  end
+  p(emptytiles.." empty tiles")
+  return emptytiles
+end
 
 function game.turn()
   for i,v in ipairs(game.players) do
     game.players[i].taketurn()
+  end
+  
+end
+function game.step()
+  game.turn()
+  return game.checkforend()
+end
+
+function game.play()
+  while true do
+    if game.step() == 0 then
+      break
+    end
   end
 end
 
