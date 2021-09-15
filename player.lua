@@ -56,6 +56,8 @@ function player.taketurn()
           print("player summoning "..x.." skeletons")
           player.skeletons = tadd("player skeleton stock",player.skeletons,0-x)
           game.board[player.location].skeletons = x
+          print("player gained "..x.." points!")
+          player.points = tadd("player points",player.points,x)
         else
           print("player has no markers!")
         end

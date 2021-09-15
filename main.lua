@@ -8,7 +8,7 @@ end
 function p(s)
   if db then print(s) end
 end
-function tadd(a,b,c)
+function tadd(c,a,b)
   print(c.." from "..a.. " to " .. a+b)
   return a+b
 end
