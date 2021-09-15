@@ -8,7 +8,10 @@ end
 function p(s)
   if db then print(s) end
 end
-
+function tadd(a,b)
+  print("from "..a.. " to " .. a+b)
+  return a+b
+end
 
 game = {}
 
@@ -44,7 +47,7 @@ end
 
 function game.turn()
   for i,v in ipairs(game.players) do
-    v.taketurn()
+    game.players[i].taketurn()
   end
 end
 

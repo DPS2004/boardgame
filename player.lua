@@ -2,15 +2,14 @@ local player = {
   
 }
 function player.init(i)
-  player = {
-    points = 0,
-    skeletons = 10,
-    markers = 10,
-    location = (i-1)*6+1,
-    id=i
-  }
+  player.points = 0
+  player.skeletons = 10
+  player.markers = 10
+  player.location = (i-1)*6+1
+  player.id=i
+  
 end
-player.taketurn = function()
+function player.taketurn()
   print("----------------------player "..player.id.."'s turn!------------------------------")
   local r = d6()
   print("rolled a "..r)
@@ -30,6 +29,42 @@ player.taketurn = function()
       player.location = player.location - 25
     end
     print("moving "..x.." tiles from "..oldloc.." to "..player.location)
+  end
+  if game.board[player.location].t == "checkpoint" then
+    print("player got to a checkpoint")
+    if game.board[player.location].skeletons ~= 0 then
+      local oldskel = player.skeletons
+      player.skeletons = player.skeletons + game.board[player.location].skeletons
+      print("player got ".. game.board[player.location].skeletons.." skeletons. ")
+      game.board[player.location].skeletons = 0
+      print("went from "..oldskel.." to ".. player.skeletons)
+    end
+  else
+    print("player got to a grave")
+    if game.board[player.location].marker == 0 then
+      print("grave is undisturbed")
+      if player.skeletons >= 1 then
+        if player.markers >= 1 then
+          local x = d6()
+          print("player rolled "..x.." skeletons")
+          print("player placing marker")
+          player.markers = tadd("marker stock",player.markers,-1)
+          game.board[player.location].marker = player.id
+          if x > player.skeletons then --very greedy strategy?
+            x = player.skeletons 
+          end
+          print("player summoning "..x.." skeletons")
+          player.skeletons = tadd("skeleton stock",player.skeletons,0-x)
+          game.board[player.location].skeletons = x
+        else
+          print("player has no markers!")
+        end
+      else
+        print("player has no skeletons!")
+      end
+    else
+      print('uh oh, grave is occupied! TODO')
+    end
   end
 end
 
