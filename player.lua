@@ -3,8 +3,8 @@ local player = {
 }
 function player.init(i)
   player.points = 0
-  player.skeletons = 10
-  player.markers = 10
+  player.skeletons = 12
+  player.markers = 8
   player.location = (i-1)*6+1
   player.id=i
   
@@ -78,6 +78,9 @@ function player.taketurn()
         else
           print("no skeletons here...")
         end
+      else
+        
+        
       end
     end
   end

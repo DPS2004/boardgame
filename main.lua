@@ -67,11 +67,18 @@ function game.step()
 end
 
 function game.play()
+  local turncount = 0
   while true do
+    turncount = turncount + 1
     if game.step() == 0 then
       break
     end
+    
   end
+  for i,v in ipairs(game.players) do
+    print("player "..i,v.points .. " points")
+  end
+  print("turncount: "..turncount)
 end
 
 
