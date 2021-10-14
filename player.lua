@@ -3,9 +3,9 @@ local player = {
 }
 function player.init(i)
   player.points = 0
-  player.skeletons = 12
-  player.markers = 8
-  player.location = (i-1)*6+1
+  player.skeletons = c_startingskeletons
+  player.markers = c_startingshovels
+  player.location = ((i-1)*6)%24+1
   player.id=i
   
 end
@@ -79,8 +79,46 @@ function player.taketurn()
           print("no skeletons here...")
         end
       else
-        
-        
+        if game.board[player.location].skeletons > 0 then
+          local rob = coin() --highly advanced ai decisionmaking 
+          local canrob = true
+          local doaction = true
+          if player.skeletons < 1 then
+            print("player does not have enough skeletons to choose grave robbery.")
+            canrob = false
+            rob = false
+          end
+          if player.markers < 1 or game.board[player.location].skeletons == 6 then
+            print("player can not crunch.")
+            rob = true
+            if canrob == false then
+              doaction = false
+              print("player can not do anything! next turn will be skipped.")
+              -- TODO add turn skipping
+            end
+          end
+          if doaction then
+            if rob then
+              print("Player has chosen to rob.")
+              local success = coin()
+              if success then
+                print("Success!")
+                local skeletonsmoved = math.ceil(game.board[player.location].skeletons / 2)
+                game.board[player.location].skeletons = tadd("skeletons from tile",game.board[player.location].skeletons, (0 - skeletonsmoved))
+                local chosencheckpoint = (math.random(0,3) * 6) + 1
+                game.board[chosencheckpoint].skeletons = tadd("skeletons to checkpoint " .. (chosencheckpoint - 1) / 6, game.board[chosencheckpoint].skeletons, skeletonsmoved)
+                
+              else
+                print("robbery failed...")
+                
+              end
+            else
+              
+            end
+          end
+        else
+          print("got to an empty grave with a marker."
+        end
       end
     end
   end

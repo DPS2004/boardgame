@@ -1,6 +1,17 @@
+-- CONFIG
+c_playercount = 4
+c_startingskeletons = 12
+c_startingshovels = 8
+
+
+
 lovebird = require "lovebird"
 
 db = true
+
+function coin()
+  return (math.random(1,2) == 1)
+end
 
 function d6()
   return math.random(1,6)
@@ -37,7 +48,7 @@ function game.init()
   end
 
   game.players = {}
-  for i=1,4 do
+  for i=1,c_playercount do
     p("making player "..i)
     game.players[i] = dofile("player.lua")
     game.players[i].init(i)
@@ -67,20 +78,54 @@ function game.step()
 end
 
 function game.play()
-  local turncount = 0
+  local results = {}
+  results.turncount = 0
   while true do
-    turncount = turncount + 1
+    results.turncount = results.turncount + 1
     if game.step() == 0 then
       break
     end
     
   end
+  results.players = {}
   for i,v in ipairs(game.players) do
+    results.players[i]= {points = v.points}
     print("player "..i,v.points .. " points")
   end
-  print("turncount: "..turncount)
+  print("turncount: "..results.turncount)
+  return results
 end
 
+function multiplay(x)
+  local mpgames = {}
+  for i=1,x do
+    game.init()
+    results = game.play()
+    table.insert(mpgames,results)
+  end
+  local minturns = 9999999999
+  local maxturns = 0
+  local totalpoints = 0
+  local totalturns = 0
+  for i,v in ipairs(mpgames) do
+    totalturns = totalturns + v.turncount
+    if v.turncount > maxturns then
+      maxturns = v.turncount
+    end
+    if v.turncount < minturns then
+      minturns = v.turncount
+    end
+    for a,b in ipairs(v.players) do
+      totalpoints = totalpoints + b.points
+    end
+  end
+  print("TOTALTURNS: ".. totalturns)
+  print("TOTALPOINTS: ".. totalpoints)
+  print("AVERAGE TURNS: ".. totalturns / x)
+  print("AVERAGE POINTS: ".. (totalpoints / x) / c_playercount)
+  print("MAX TURNS TAKEN: " .. maxturns)
+  print("MIN TURNS TAKEN: " .. minturns)
+end
 
 game.init()
 
